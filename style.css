@@ -8,7 +8,7 @@ body {
   background: #ff9a9e; /* Màu nền hồng nhạt */
   background: linear-gradient(135deg, #fad0c4 0%, #ff9a9e 100%);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  overflow-y: auto;
+  overflow: hidden;
   cursor: pointer;
   text-align: center;
   user-select: none;
