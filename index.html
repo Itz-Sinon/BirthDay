@@ -79,12 +79,30 @@
 
       // Danh sách các lời chúc
       const wishes = [
-        "Chúc bạn tuổi mới thật rực rỡ và hạnh phúc! ✨",
-        "Mỗi ngày mới đều là một món quà, tuổi mới hãy luôn cười nhé! 😊",
-        "Chúc bạn đạt được mọi dự định trong năm nay! 🚀",
-        "Luôn xinh đẹp, tự tin và yêu đời như hiện tại nha! 🌸",
-        "Vạn sự như ý, tỷ sự như mơ, làm việc như thơ! 💰",
-        "Chúc bạn nhận được thật nhiều quà và tình yêu thương! 🎁",
+        {
+          text: "Chúc bạn tuổi mới thật rực rỡ và hạnh phúc! ✨",
+          from: "- From Sinon -",
+        },
+        {
+          text: "Mỗi ngày mới đều là một món quà, tuổi mới hãy luôn cười nhé! 😊",
+          from: "- From Team Dev -",
+        },
+        {
+          text: "Chúc bạn đạt được mọi dự định trong năm nay! 🚀",
+          from: "- From All Friends -",
+        },
+        {
+          text: "Luôn xinh đẹp, tự tin và yêu đời như hiện tại nha! 🌸",
+          from: "- From Sinon -",
+        },
+        {
+          text: "Vạn sự như ý, tỷ sự như mơ, làm việc như thơ! 💰",
+          from: "- From Bestie -",
+        },
+        {
+          text: "Chúc bạn nhận được thật nhiều quà và tình yêu thương! 🎁",
+          from: "- From Family -",
+        },
       ];
 
       let currentWishIndex = -1;
@@ -119,15 +137,17 @@
         }
 
         currentWishIndex++;
+        const currentWish = wishes[currentWishIndex];
 
         // Hiệu ứng đổi chữ
         wishText.classList.remove("fade");
         void wishText.offsetWidth; // Trigger reflow
         wishText.classList.add("fade");
 
-        wishText.innerText = wishes[currentWishIndex];
+        wishText.innerText = currentWish.text;
 
         // Hiện ký tên
+        wishSignature.innerText = currentWish.from;
         wishSignature.style.display = "block";
 
         // 1. Phía dưới: Ảnh nhân vật chính (Không ngẫu nhiên - đi theo lời chúc)
