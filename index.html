@@ -27,13 +27,21 @@
 
       <!-- Màn hình cuối cùng hiện sau khi hết tất cả lời chúc -->
       <div id="final-screen" style="display: none">
-        <div id="final-wish-box" class="wish-box-final">
-          <h1 id="title">Happy Birthday! 💖</h1>
-          <p id="wish-text">Mong bạn luôn rạng rỡ và hạnh phúc như những tấm ảnh kỷ niệm này nhé!</p>
+        <div class="final-container-layout">
+          <!-- Cột bên trái: 3 ảnh -->
+          <div id="left-meme-col" class="meme-col"></div>
+          
+          <!-- Hộp lời chúc ở giữa -->
+          <div id="final-wish-box" class="wish-box-final">
+            <h1 id="title">Happy Birthday! 💖</h1>
+            <p id="wish-text">Mong bạn luôn rạng rỡ và hạnh phúc như những tấm ảnh kỷ niệm này nhé!</p>
+          </div>
+          
+          <!-- Cột bên phải: 3 ảnh -->
+          <div id="right-meme-col" class="meme-col"></div>
         </div>
-        <div id="full-meme-gallery" class="meme-gallery-full">
-          <!-- Ảnh sẽ được JS tự động điền vào đây -->
-        </div>
+        
+        <button id="restart-btn">Quay lại từ đầu 🔄</button>
       </div>
     </div>
 
@@ -77,6 +85,7 @@
       const finalScreen = document.getElementById("final-screen");
       const fullMemeGallery = document.getElementById("full-meme-gallery");
       const wishWrapper = document.querySelector(".wish-wrapper");
+      const restartBtn = document.getElementById("restart-btn");
 
       // Hàm lấy ảnh ngẫu nhiên không trùng nhau (nếu có thể)
       function getRandomMemes(count) {
@@ -129,6 +138,9 @@
         createConfetti();
       }
 
+      const leftMemeCol = document.getElementById("left-meme-col");
+      const rightMemeCol = document.getElementById("right-meme-col");
+
       function showFinalScreen() {
         // Ẩn các thứ bình thường
         wishWrapper.style.display = "none";
@@ -138,22 +150,33 @@
         // Hiện màn hình cuối
         finalScreen.style.display = "flex";
 
-        // Đổ toàn bộ ảnh vào gallery cuối
-        fullMemeGallery.innerHTML = "";
-        memes.forEach((meme, index) => {
-          const rotation = (Math.random() - 0.5) * 20; // Xoay ngẫu nhiên cho đẹp
+        // Làm sạch cột
+        leftMemeCol.innerHTML = "";
+        rightMemeCol.innerHTML = "";
+
+        // Đổ tối đa 6 ảnh vào 2 bên
+        memes.slice(0, 6).forEach((meme, index) => {
           const card = document.createElement("div");
           card.className = "meme-card";
-          card.style.transform = `rotate(${rotation}deg)`;
-          card.style.animation = `slideUp 0.6s ease ${index * 0.1}s both`;
+          
+          // Tạo độ nghiêng tầm 15 độ (đan xen âm dương)
+          const angle = index % 2 === 0 ? 15 : -15;
+          card.style.transform = `rotate(${angle}deg)`;
+          card.style.animation = `slideUp 0.6s ease ${index * 0.15}s both`;
+          
           card.innerHTML = `
             <img src="${meme.src}" alt="${meme.caption}" />
             <div class="meme-caption">${meme.caption}</div>
           `;
-          fullMemeGallery.appendChild(card);
+          
+          if (index < 3) {
+            leftMemeCol.appendChild(card);
+          } else {
+            rightMemeCol.appendChild(card);
+          }
         });
 
-        // Tung thật nhiều pháo hoa
+        // Tung pháo hoa
         for (let i = 0; i < 3; i++) {
           setTimeout(createConfetti, i * 500);
         }
@@ -162,10 +185,29 @@
       // Khởi tạo lần đầu
       // changeWish(); // Nếu bạn muốn hiện ngay khi vừa mở trang thì bỏ comment dòng này
 
+      // Nút quay lại từ đầu
+      restartBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Không kích hoạt click body
+        currentWishIndex = -1;
+        
+        // Hiện lại giao diện ban đầu
+        wishWrapper.style.display = "block";
+        mainMemeContainer.style.display = "none";
+        document.querySelector(".hint").style.display = "block";
+        finalScreen.style.display = "none";
+        
+        // Reset text và làm sạch góc
+        wishText.innerText = "Bấm vào màn hình để nhận lời chúc nhé...";
+        cornerTL.innerHTML = "";
+        cornerTR.innerHTML = "";
+        cornerBL.innerHTML = "";
+        cornerBR.innerHTML = "";
+      });
+
       // Lắng nghe sự kiện click/tap trên toàn màn hình
       document.body.addEventListener("click", (e) => {
-        // Nếu nhấn trúng thẻ ảnh hoặc nằm trong thẻ ảnh thì không đổi lời chúc
-        if (e.target.closest(".meme-card") || e.target.closest(".corner-meme")) return;
+        // Nếu nhấn trúng thẻ ảnh, nút bấm hoặc thẻ corner thì không đổi lời chúc
+        if (e.target.closest(".meme-card") || e.target.closest(".corner-meme") || e.target.id === "restart-btn") return;
         changeWish();
       });
 
