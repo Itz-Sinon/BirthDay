@@ -45,10 +45,7 @@ body {
   width: 120px;
   height: 120px;
   z-index: 25;
-  background: white;
   padding: 5px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -155,7 +152,7 @@ p {
   padding: 15px 15px 35px 15px;
   border-radius: 5px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: 300px;
+  width: 400px; /* Tăng kích thước ảnh theo ý bạn */
   transition: transform 0.3s ease;
   position: relative;
 }
@@ -166,10 +163,19 @@ p {
 
 .meme-card img {
   width: 100%;
-  height: 250px;
+  height: 350px; /* Tăng chiều cao tương ứng */
   object-fit: cover;
   border-radius: 2px;
   background-color: #f1f1f1;
+}
+
+#wish-signature {
+  margin-top: 15px;
+  font-family: "Brush Script MT", "Segoe Print", cursive;
+  font-size: 1.6rem;
+  color: #ff4757;
+  text-align: right;
+  width: 100%;
 }
 
 .meme-caption {
@@ -265,3 +271,92 @@ p {
   z-index: 1;
   pointer-events: none;
 }
+
+/* Responsiveness for Mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 1.2rem;
+    min-height: 80px;
+  }
+
+  #wish-box {
+    padding: 25px;
+    width: 85%;
+  }
+
+  .corner-meme {
+    width: 80px;
+    height: 80px;
+  }
+
+  .top-left {
+    top: -40px;
+    left: -20px;
+  }
+
+  .top-right {
+    top: -35px;
+    right: -20px;
+  }
+
+  .bottom-left {
+    bottom: -30px;
+    left: -15px;
+  }
+
+  .bottom-right {
+    bottom: -30px;
+    right: -15px;
+  }
+
+  #main-meme-container.meme-card {
+    width: 260px;
+  }
+
+  #main-meme-container.meme-card img {
+    height: 200px;
+  }
+
+  .final-container-layout {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .meme-col {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .meme-col .meme-card {
+    width: 120px;
+    padding: 5px 5px 20px 5px;
+  }
+
+  .meme-col .meme-card img {
+    height: 100px;
+  }
+
+  .meme-col .meme-caption {
+    font-size: 0.9rem;
+    margin-top: 5px;
+  }
+
+  #final-wish-box {
+    width: 90%;
+    padding: 20px;
+    order: -1; /* Đẩy hộp chúc lên trên cùng cho dễ đọc */
+  }
+
+  #restart-btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+  }
+}
+

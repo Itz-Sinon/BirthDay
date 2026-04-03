@@ -16,6 +16,7 @@
           <div class="corner-meme bottom-right" id="corner-br"></div>
           <h1 id="title">Happy Birthday! 🎂</h1>
           <p id="wish-text">Bấm vào màn hình để nhận lời chúc nhé...</p>
+          <p id="wish-signature" style="display: none">- From Sinon -</p>
         </div>
       </div>
 
@@ -30,17 +31,20 @@
         <div class="final-container-layout">
           <!-- Cột bên trái: 3 ảnh -->
           <div id="left-meme-col" class="meme-col"></div>
-          
+
           <!-- Hộp lời chúc ở giữa -->
           <div id="final-wish-box" class="wish-box-final">
             <h1 id="title">Happy Birthday! 💖</h1>
-            <p id="wish-text">Mong bạn luôn rạng rỡ và hạnh phúc như những tấm ảnh kỷ niệm này nhé!</p>
+            <p id="wish-text">
+              Mong bạn luôn rạng rỡ và hạnh phúc như những tấm ảnh kỷ niệm này
+              nhé!
+            </p>
           </div>
-          
+
           <!-- Cột bên phải: 3 ảnh -->
           <div id="right-meme-col" class="meme-col"></div>
         </div>
-        
+
         <button id="restart-btn">Quay lại từ đầu 🔄</button>
       </div>
     </div>
@@ -48,14 +52,29 @@
     <div class="hint">Chạm tay vào màn hình ❤️</div>
 
     <script>
-      // Danh sách ảnh meme
+      // Danh sách ảnh của nhân vật chính (Ảnh này sẽ hiện ở ổ chính phía dưới)
+      const heroImages = [
+        { src: "./public/hero/main-1.png", caption: "Ngôi sao hôm nay! ✨" },
+        {
+          src: "./public/hero/main-2.png",
+          caption: "Xinh đẹp/Đẹp trai quá! 😍",
+        },
+        {
+          src: "./public/hero/main-3.png",
+          caption: "Cười tươi như hoa nhé! 🌸",
+        },
+      ];
+
+      // Danh sách ảnh meme (Ảnh này sẽ hiện ngẫu nhiên ở 2 góc card lời chúc)
       const memes = [
-        { src: "meme1.jpg", caption: "Siêu quậy!" },
-        { src: "meme2.jpg", caption: "Khoảnh khắc khó đỡ" },
-        { src: "meme3.jpg", caption: "Cười xỉu" },
-        { src: "meme4.jpg", caption: "Birthday Vibes" },
-        { src: "meme5.jpg", caption: "Hết nước chấm" },
-        { src: "meme6.jpg", caption: "Quá là sướng" },
+        { src: "./public/memes/gift-1.png" },
+        { src: "./public/memes/gift-2.png" },
+        { src: "./public/memes/gift-3.png" },
+        { src: "./public/memes/gift-6.png" },
+        { src: "./public/memes/gift-7.png" },
+        { src: "./public/memes/gift-9.png" },
+        { src: "./public/memes/gift-10.png" },
+        { src: "./public/memes/gift-12.png" },
       ];
 
       // Danh sách các lời chúc
@@ -66,8 +85,6 @@
         "Luôn xinh đẹp, tự tin và yêu đời như hiện tại nha! 🌸",
         "Vạn sự như ý, tỷ sự như mơ, làm việc như thơ! 💰",
         "Chúc bạn nhận được thật nhiều quà và tình yêu thương! 🎁",
-        "Sức khỏe dồi dào, tiền vào như nước, tiền ra nhỏ giọt! 🧧",
-        "Happy Birthday! Mong mọi điều tốt đẹp nhất sẽ đến với bạn! ❤️",
       ];
 
       let currentWishIndex = -1;
@@ -76,16 +93,17 @@
       const mainMemeContainer = document.getElementById("main-meme-container");
       const mainMemeImg = document.getElementById("main-meme-img");
       const mainMemeCaption = document.getElementById("main-meme-caption");
-      
+
       const cornerTL = document.getElementById("corner-tl");
       const cornerTR = document.getElementById("corner-tr");
       const cornerBL = document.getElementById("corner-bl");
       const cornerBR = document.getElementById("corner-br");
-      
+
       const finalScreen = document.getElementById("final-screen");
       const fullMemeGallery = document.getElementById("full-meme-gallery");
       const wishWrapper = document.querySelector(".wish-wrapper");
       const restartBtn = document.getElementById("restart-btn");
+      const wishSignature = document.getElementById("wish-signature");
 
       // Hàm lấy ảnh ngẫu nhiên không trùng nhau (nếu có thể)
       function getRandomMemes(count) {
@@ -109,13 +127,17 @@
 
         wishText.innerText = wishes[currentWishIndex];
 
-        // Đổi ảnh meme
-        const selectedMemes = getRandomMemes(3);
-        
-        // Hiện ảnh chính phía dưới
+        // Hiện ký tên
+        wishSignature.style.display = "block";
+
+        // 1. Phía dưới: Ảnh nhân vật chính (Không ngẫu nhiên - đi theo lời chúc)
+        const currentHero = heroImages[currentWishIndex % heroImages.length];
         mainMemeContainer.style.display = "flex";
-        mainMemeImg.src = selectedMemes[0].src;
-        mainMemeCaption.innerText = selectedMemes[0].caption;
+        mainMemeImg.src = currentHero.src;
+        mainMemeCaption.innerText = currentHero.caption;
+
+        // 2. Góc Card: Lấy 2 ảnh meme ngẫu nhiên
+        const selectedMemes = getRandomMemes(2);
 
         // Làm sạch hết góc cũ
         cornerTL.innerHTML = "";
@@ -126,12 +148,12 @@
         // Hiện 2 ảnh nhỏ ở các góc xen kẽ nhau
         if (currentWishIndex % 2 === 0) {
           // Lần chẵn (Câu 1, 3, 5...): Top-Right và Bottom-Left
-          cornerTR.innerHTML = `<img src="${selectedMemes[1].src}" class="mini-meme" />`;
-          cornerBL.innerHTML = `<img src="${selectedMemes[2].src}" class="mini-meme" />`;
+          cornerTR.innerHTML = `<img src="${selectedMemes[0].src}" class="mini-meme" />`;
+          cornerBL.innerHTML = `<img src="${selectedMemes[1].src}" class="mini-meme" />`;
         } else {
           // Lần lẻ (Câu 2, 4, 6...): Top-Left và Bottom-Right
-          cornerTL.innerHTML = `<img src="${selectedMemes[1].src}" class="mini-meme" />`;
-          cornerBR.innerHTML = `<img src="${selectedMemes[2].src}" class="mini-meme" />`;
+          cornerTL.innerHTML = `<img src="${selectedMemes[0].src}" class="mini-meme" />`;
+          cornerBR.innerHTML = `<img src="${selectedMemes[1].src}" class="mini-meme" />`;
         }
 
         // Tạo pháo hoa giấy khi bấm
@@ -158,17 +180,17 @@
         memes.slice(0, 6).forEach((meme, index) => {
           const card = document.createElement("div");
           card.className = "meme-card";
-          
+
           // Tạo độ nghiêng tầm 15 độ (đan xen âm dương)
           const angle = index % 2 === 0 ? 15 : -15;
           card.style.transform = `rotate(${angle}deg)`;
           card.style.animation = `slideUp 0.6s ease ${index * 0.15}s both`;
-          
+
           card.innerHTML = `
             <img src="${meme.src}" alt="${meme.caption}" />
             <div class="meme-caption">${meme.caption}</div>
           `;
-          
+
           if (index < 3) {
             leftMemeCol.appendChild(card);
           } else {
@@ -189,15 +211,16 @@
       restartBtn.addEventListener("click", (e) => {
         e.stopPropagation(); // Không kích hoạt click body
         currentWishIndex = -1;
-        
+
         // Hiện lại giao diện ban đầu
         wishWrapper.style.display = "block";
         mainMemeContainer.style.display = "none";
         document.querySelector(".hint").style.display = "block";
         finalScreen.style.display = "none";
-        
+
         // Reset text và làm sạch góc
         wishText.innerText = "Bấm vào màn hình để nhận lời chúc nhé...";
+        wishSignature.style.display = "none";
         cornerTL.innerHTML = "";
         cornerTR.innerHTML = "";
         cornerBL.innerHTML = "";
@@ -207,7 +230,12 @@
       // Lắng nghe sự kiện click/tap trên toàn màn hình
       document.body.addEventListener("click", (e) => {
         // Nếu nhấn trúng thẻ ảnh, nút bấm hoặc thẻ corner thì không đổi lời chúc
-        if (e.target.closest(".meme-card") || e.target.closest(".corner-meme") || e.target.id === "restart-btn") return;
+        if (
+          e.target.closest(".meme-card") ||
+          e.target.closest(".corner-meme") ||
+          e.target.id === "restart-btn"
+        )
+          return;
         changeWish();
       });
 
